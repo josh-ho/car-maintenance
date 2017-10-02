@@ -1,0 +1,36 @@
+{
+  "vehicles" : [
+    {
+      "type": "Mini Cooper",
+      "year": "2010",
+      "mileage": 83294,
+      "maintenance" : {
+        "oilChange" : {
+          "name" : "Oil Change",
+          "date" : "2017/10/01",
+          "mileage" : 12345
+        },
+        "brakes" : {
+          "name" : "Brakes and Rotors",
+          "date" : "2017/10/01",
+          "mileage" : 12345
+        },
+        "sparkPlugs": {
+          "name" : "Spark Plugs",
+          "date" : "2017/10/01",
+          "mileage" : 12345
+        },
+        "transmissionFluid" : {
+          "name" : "Automatic Transmission Fluid",
+          "date" : "2017/10/01",
+          "mileage" : 12345
+        },
+        "filters" : {
+          "name" : "CBS Filters",
+          "date" : "2017/10/01",
+          "mileage" : 12345
+        }
+      }
+    }
+  ]
+}
