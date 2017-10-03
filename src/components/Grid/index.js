@@ -1,1 +1,3 @@
-export default from './Grid.js'
+import Grid from './Grid'
+
+export default Grid

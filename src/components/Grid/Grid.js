@@ -4,10 +4,10 @@ class Grid extends React.Component {
   render() {
     return(
       <table>
-        
+
       </table>
     )
   }
 }
 
-export defualt Grid
+export default Grid
