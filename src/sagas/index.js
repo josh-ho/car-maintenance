@@ -1,7 +1,7 @@
 import { fork, call, put } from 'redux-saga/effects'
 import * as actions from '../actions'
 
-export function* loadVehicleData() {
+function* loadVehicleData() {
   return yield new Promise( ( resolve, reject ) => {
     window.firebase.ref( 'vehicles' ).on( "value",
     ( data ) => {
@@ -14,9 +14,17 @@ export function* loadVehicleData() {
   } )
 }
 
+function* saveVehicleData() {
+  
+}
+
 export function* getVehicle() {
   const vehicleData = yield call( loadVehicleData )
   yield put( actions.loadVehicleData( vehicleData ) )
+}
+
+export function* saveImageToServer() {
+
 }
 
 export default function* rootSaga() {

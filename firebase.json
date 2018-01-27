@@ -10,6 +10,11 @@
           "date" : "2017/10/01",
           "mileage" : 12345
         },
+        "airFilter" : {
+          "name" : "Engine Air Filter",
+          "date" : "2017/10/01",
+          "mileage" : 45000
+        },
         "brakes" : {
           "name" : "Brakes and Rotors",
           "date" : "2017/10/01",
@@ -18,17 +23,17 @@
         "sparkPlugs": {
           "name" : "Spark Plugs",
           "date" : "2017/10/01",
-          "mileage" : 12345
+          "mileage" : 100000
         },
         "transmissionFluid" : {
           "name" : "Automatic Transmission Fluid",
           "date" : "2017/10/01",
-          "mileage" : 12345
+          "mileage" : 50000
         },
-        "filters" : {
-          "name" : "CBS Filters",
+        "oxygenSensor": {
+          "name" : "Oxygen Sensor",
           "date" : "2017/10/01",
-          "mileage" : 12345
+          "mileage" : 120000
         }
       }
     }
