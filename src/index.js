@@ -12,7 +12,8 @@ import App from './containers/App';
 const sagaMiddleWare = createSagaMiddleware()
 const store = createStore(
   reducers,
-  applyMiddleware( sagaMiddleWare )
+  window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__(),
+  applyMiddleware( sagaMiddleWare ),
 )
 
 sagaMiddleWare.run( saga )

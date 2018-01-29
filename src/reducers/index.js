@@ -1,9 +1,9 @@
 import { combineReducers } from 'redux'
-import * as vehicleActionTypes from '../constants'
+import * as app from '../constants'
 
 const vehicleData = ( state = {}, action ) => {
   switch( action.type ) {
-    case vehicleActionTypes.LOAD_VEHICLE :
+    case app.LOAD_VEHICLE :
       return {
         ...state,
         vehicles:action.data,
@@ -14,8 +14,21 @@ const vehicleData = ( state = {}, action ) => {
   }
 }
 
+const imageData = (state = {}, action) => {
+  switch( action.type ) {
+    case app.PARSED_DATA:
+      return {
+        ...state,
+        parsedData: action.data
+      }
+    default :
+      return state
+  }
+}
+
 const rootReducer = combineReducers( {
-  vehicleData
+  vehicleData,
+  imageData
 })
 
 export default rootReducer

@@ -6,3 +6,17 @@ export function loadVehicleData( data ) {
     data
   }
 }
+
+export function uploadAndParseImage(file) {
+  return {
+    type: actionType.UPLOAD_VEHICLE_IMAGE,
+    file
+  }
+}
+
+export function parsedImage(data) {
+  return {
+    type: actionType.PARSED_DATA,
+    data
+  }
+}

@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux'
 import { BarChart, XAxis, YAxis, Legend, Bar, CartesianGrid, Tooltip } from 'recharts'
+import Dropzone from 'react-dropzone'
 import MiniCooper from '../assets/mini-cooper.jpg'
+import { uploadAndParseImage } from '../actions'
 import './App.css';
 
 class App extends Component {
@@ -13,7 +15,9 @@ class App extends Component {
       height: 400,
       vehicleIndex: 0,
       vehicleData : {},
-      content: undefined
+      content: undefined,
+      acceptedFiles: [],
+      graphData: []
     }
   }
 
@@ -23,15 +27,14 @@ class App extends Component {
         <p>Loading Data...</p>
       )
     }
-
     this.setState(initState)
   }
 
   componentWillReceiveProps(nextProps) {
-    const { width, height, vehicleData, vehicleIndex } = this.state
+    const { vehicleData, vehicleIndex } = this.state
 
     let nextState = {}
-
+    console.log(nextProps.vehicleData)
     if(!vehicleData.data || JSON.stringify(vehicleData.data) !== JSON.stringify(nextProps.vehicleData.vehicles)) {
       nextState = {
         vehicleData: {
@@ -41,7 +44,7 @@ class App extends Component {
           mileage: nextProps.vehicleData.vehicles[vehicleIndex].mileage
         },
       }
-
+      console.log(nextState)
       if(!vehicleData.data) {
         const maintenanceData = nextProps.vehicleData.vehicles[vehicleIndex].maintenance
         const data = Object.keys(maintenanceData).map(key => {
@@ -54,62 +57,94 @@ class App extends Component {
 
         nextState = {
           ...nextState,
-          content: (
-            <section>
-              <img src={MiniCooper} alt="Mini Cooper" />
-              <h1>{`${nextProps.vehicleData.vehicles[vehicleIndex].type} ${nextProps.vehicleData.vehicles[vehicleIndex].year}`}</h1>
-              <p>Odometer Reading: {nextProps.vehicleData.vehicles[vehicleIndex].mileage}</p>
-              <BarChart
-                width={600}
-                height={300}
-                data={data}
-                margin={{top: 20, right: 30, left: 20, bottom: 5}}
-              >
-                <XAxis dataKey="name" />
-                <YAxis />
-                <Tooltip/>
-                <Legend />
-                {
-                  data.map(childData => {
-                    const randomColor = '#'+'0123456789abcdef'.split('').map(
-                      (v, i, a) => {
-                        return i>5 ? null : a[Math.floor(Math.random()*16)]
-                      }
-                    ).join('')
-                    return (
-                      <Bar
-                        dataKey={childData.name}
-                        stackId="a"
-                        fill={randomColor}
-                      />
-                    )
-                  })
-                }
-              </BarChart>
-            </section>
-          )
+          graphData: data,
+        }
+      }
+      console.log(nextState)
+      if(Object.keys(nextProps.parsedImageData).length) {
+        console.log(nextProps.parsedImageData[0])
+        nextState = {
+          ...nextState,
+          vehicleData: {
+            ...nextState.vehicleData,
+            mileage: (nextProps.parsedImageData.parsedData[0]) ? nextProps.parsedImageData.parsedData[0].description : undefined
+          }
         }
       }
     }
-
+    console.log(nextState)
     this.setState(nextState)
   }
 
+  dropHandler = (accepted, rejected) => {
+    const { uploadAndParseImage } = this.props
+    uploadAndParseImage(accepted)
+    this.setState({accepted})
+  }
+
   render() {
-    const { vehicleData, content } = this.state
-    console.log( vehicleData )
+    const { vehicleData, graphData, vehicleIndex, width, height } = this.state
+    const vehicleType = (vehicleData) ? vehicleData.type : undefined
+    const vehicleYear = (vehicleData) ? vehicleData.year : undefined
     return (
       <main className="App">
-        {content}
+      <section>
+        <img src={MiniCooper} alt="Mini Cooper" />
+        <h1>{`${vehicleType} ${vehicleYear}`}</h1>
+        <p>Odometer Reading: {vehicleData.mileage}</p>
+        <Dropzone
+          accept="image/jpeg, image/png"
+          onDrop={this.dropHandler}
+        >
+        </Dropzone>
+        <BarChart
+          width={width}
+          height={height}
+          data={graphData}
+          margin={{top: 20, right: 30, left: 20, bottom: 5}}
+        >
+          <XAxis dataKey="name" />
+          <YAxis />
+          <Tooltip/>
+          <Legend />
+          {
+            graphData.map(childData => {
+              const randomColor = '#'+'0123456789abcdef'.split('').map(
+                (v, i, a) => {
+                  return i>5 ? null : a[Math.floor(Math.random()*16)]
+                }
+              ).join('')
+              return (
+                <Bar
+                  dataKey={childData.name}
+                  stackId="a"
+                  fill={randomColor}
+                />
+              )
+            })
+          }
+        </BarChart>
+      </section>
       </main>
     );
   }
 }
 
-const mapStateToProps = ( state ) => {
+const mapDispatchToProps = dispatch => {
   return {
-    vehicleData : state.vehicleData
+    uploadAndParseImage: files => {
+      console.log(files)
+      dispatch(uploadAndParseImage(files))
+    }
   }
 }
 
-export default connect( mapStateToProps )( App );
+const mapStateToProps = state => {
+  console.log(state)
+  return {
+    vehicleData : state.vehicleData,
+    parsedImageData : state.imageData
+  }
+}
+
+export default connect( mapStateToProps, mapDispatchToProps )( App );
